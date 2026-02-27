@@ -6,7 +6,7 @@ pygame.init()
 screen = pygame.display.set_mode((800, 800))
 clock = pygame.time.Clock()                                             #FPS control
 pygame.display.set_caption("S & L ")
-p1=pygame.image.load("D:\\Python\\p1.png").convert_alpha()                 #player 1 img
+p1=pygame.image.load("D:\\Python\\p1.png").convert_alpha()                 
 p2=pygame.image.load("D:\\Python\\p2.png").convert_alpha()
 scaledp1 = pygame.transform.scale(p1, (60, 60))
 scaledp2 = pygame.transform.scale(p2, (60, 60))
@@ -127,4 +127,5 @@ while running:
 
     pygame.display.flip()
     clock.tick(30)   
+
 pygame.quit()
