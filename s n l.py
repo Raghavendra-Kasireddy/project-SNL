@@ -3,17 +3,19 @@ import random
 import time;
 pygame.init()
 
-screen = pygame.display.set_mode((800, 800))
+screen = pygame.display.set_mode((600, 800))
 clock = pygame.time.Clock()                                             #FPS control
 pygame.display.set_caption("S & L ")
-p1=pygame.image.load("D:\\Python\\p1.png").convert_alpha()                 
+p1=pygame.image.load("D:\\Python\\p1.png").convert_alpha()                 #player 1 img
 p2=pygame.image.load("D:\\Python\\p2.png").convert_alpha()
 scaledp1 = pygame.transform.scale(p1, (60, 60))
 scaledp2 = pygame.transform.scale(p2, (60, 60))
 SAM=pygame.image.load("D:\\Python\\S&L logo.png").convert_alpha()                 #sam img
 scaledSAM = pygame.transform.scale(SAM, (40,40))
 
-board = pygame.image.load("D:\\Python\\board.png").convert_alpha()   
+B=pygame.image.load("D:\\Python\\snlboard.png").convert_alpha() 
+board = pygame.transform.scale(B, (500, 570))                                       #board img  
+
 dice_images = [None] 
 for i in range(1, 7):                                                   #load dice imgs
     path = f"D:\\Python\\{i}.png"
@@ -114,18 +116,20 @@ while running:
     if dice_1 > 0:
         screen.blit(dice_images[dice_1], (50, 675))                     #display dice image
     if dice_2 > 0:
-        screen.blit(dice_images[dice_2], (575, 675))
-    screen.blit(board, (150,75)) 
-    screen.blit(scaledSAM, (155
-    ,615))                                         #display sam img
-    screen.blit(scaledp1, (150 + player_position_1 * 30, 75 + 300 - player_position_1 * 30))   #display player 1
-    screen.blit(scaledp2, (150 + player_position_2 * 30, 75 + 300 - player_position_2 * 30))   #display player 2
-    screen.blit(text_surface, (275,725))                                #refresh roll text
-    screen.blit(position_1, (25, 25))                                   #refresh position
-    screen.blit(position_2, (400, 25))
+        screen.blit(dice_images[dice_2], (355, 675))
+    screen.blit(board,(50,75))
+
+
+    screen.blit(scaledSAM,(75,530))                                         #display sam img
+
+
+    screen.blit(text_surface,(275,725))                                #refresh roll text
+    screen.blit(position_1,(5, 25))                                   #refresh position
+    screen.blit(position_2,(350, 25))
     screen.blit(Arial.render(f"current player :{current_player}", True,(255, 86, 160)), (250, 750)) #current player turn
 
     pygame.display.flip()
     clock.tick(30)   
-
 pygame.quit()
+coordinates = {
+    1: (25,530),}
