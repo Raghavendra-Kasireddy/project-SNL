@@ -7,15 +7,16 @@ laddersound = pygame.mixer.Sound("D:\\Python\\laddereffect.mpeg")
 snakesound = pygame.mixer.Sound("D:\\Python\\snakeeffect.MP3.mpeg")
 rollsound = pygame.mixer.Sound("D:\\Python\\rolleffect.MP3.mpeg")
 
-screen = pygame.display.set_mode((600, 800))
+
 
 #loads
+screen = pygame.display.set_mode((600, 800))
 pygame.display.set_caption("S & L ")
 logo=pygame.image.load("D:\\Python\\S&L logo.png").convert_alpha()
 pygame.display.set_icon(logo)
 scaledp1 = pygame.transform.scale(pygame.image.load("D:\\Python\\p1.png").convert_alpha(), (60, 60))
 scaledp2 = pygame.transform.scale(pygame.image.load("D:\\Python\\p2.png").convert_alpha(), (60, 60))
-congrats=pygame.transform.scale(pygame.image.load("D:\\Python\\congrats.png").convert_alpha(),(500,200))
+congrats=pygame.transform.scale(pygame.image.load("D:\\Python\\congrats.png").convert_alpha(),(400,200))
 board = pygame.transform.scale(pygame.image.load("D:\\Python\\snlboard.png").convert_alpha(), (500, 567)) 
 woodbg = pygame.transform.scale(pygame.image.load("D:\\Python\\woodbg.png").convert_alpha(), (600, 800))
 bg=pygame.image.load("D:\\Python\\snlbackground.png").convert_alpha()  
@@ -27,7 +28,7 @@ mute_img = pygame.transform.scale(pygame.image.load("D:\\Python\\0m.png").conver
 unmute_img = pygame.transform.scale(pygame.image.load("D:\\Python\\1m.png").convert_alpha(),(100,100))
 leave_img = pygame.transform.scale(pygame.image.load("D:\\Python\\leave.png").convert_alpha(),(75,75))  
 
-coordinates = {0:(275,704),1:(55,564),2:(105,564),3:(155,564),4:(202,564),5:(255,564),6:(305,564),7:(355,564),8:(405,564),9:(455,564),10:(505,564),
+coordinates = {0:(275,734),1:(55,564),2:(105,564),3:(155,564),4:(202,564),5:(255,564),6:(305,564),7:(355,564),8:(405,564),9:(455,564),10:(505,564),
                11:(505,508),12:(455,508),13:(405,508),14:(355,508),15:(305,508),16:(255,508),17:(202,508),18:(155,508),19:(105,508),20:(55,508),
                 21:(55,450),22:(105,450),23:(155,450),24:(202,450),25:(255,450),26:(305,450),27:(355,450),28:(405,450),29:(455,450),30:(505,450),
                 31:(505,396),32:(455,396),33:(405,396),34:(355,396),35:(305,396),36:(255,396),37:(202,396),38:(155,396),39:(105,396),40:(55,396),
@@ -44,14 +45,10 @@ for i in range(1, 7):                                                   #load di
     scaled_img = pygame.transform.scale(img, (100,100))
     dice_images.append(scaled_img)
 
-   
-position_1 = pygame.font.SysFont("Arial", 30).render("Player Position 1: ", True, (255, 93, 93)) 
-position_2 = pygame.font.SysFont("Arial", 30).render("Player Position 2: ", True, (255, 93, 93)) 
-
 #game variables
 current_player=1   
-player_position_1=0
-player_position_2=0
+player_position_1=90
+player_position_2=90
 dice_1 = 0
 dice_2 = 0
 position_1 = pygame.font.SysFont("Arial", 30).render(f"Player Position 1: {player_position_1}", True, (255, 255, 255))
@@ -95,6 +92,8 @@ roll_text = pygame.font.SysFont("Arial", 30).render("Roll (R)", True, (255, 255,
 quit_roll_button = pygame.Rect(0,50,50,50)
 quit_button=pygame.Rect(230,243,80,80)
 mute_button = pygame.Rect(150,250,60,60)
+rst_quit=pygame.Rect(380,470,80,80)
+play_again=pygame.Rect(150,460,80,80)
 
 
 def main_menu():
@@ -121,10 +120,8 @@ def main_menu():
               
 def play_game():
     running = True
-    
     while running:
         global current_player, player_position_1, player_position_2, dice_1, dice_2, position_1, position_2
-        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -166,10 +163,27 @@ def play_game():
                             player_position_1 -= current_dice
                             position_1 = pygame.font.SysFont("Arial", 30).render(f"Player Position 1: {player_position_1}", True, (255,255,255))
                         if player_position_1 == 100:
-                            screen.blit(congrats)
-                            player_position_1 = 0
-                            player_position_2=0
-                            delay_and_ignore_input(1000)
+                            win_screen=True
+                            
+                            screen.blit(options_menu,(100,200))
+                            screen.blit(congrats,(100,200))
+                            screen.blit(leave_img,(380,470))
+                            screen.blit(restart_img,(150,460))
+                            screen.blit(pygame.font.SysFont("Arial",50).render("Player 1 won ", True, (255,255,255)),(190,400))
+                            while win_screen :
+                                for event in pygame.event.get():
+                                    if event.type==pygame.QUIT:
+                                        pygame.quit()
+                                    if (event.type == pygame.MOUSEBUTTONDOWN and rst_quit.collidepoint(event.pos)):
+                                        player_position_1=0
+                                        player_position_2=0
+                                        main_menu()
+                                    if (event.type == pygame.MOUSEBUTTONDOWN and play_again.collidepoint(event.pos)):
+                                        player_position_1 = 0
+                                        player_position_2=0
+                                        play_game()
+                                pygame.display.flip()
+                        delay_and_ignore_input(500)
                     if current_dice == 6:
                         current_player = 1
                     else:
@@ -212,10 +226,26 @@ def play_game():
                                 position_2 = pygame.font.SysFont("Arial", 30).render(f"Player Position 2: {player_position_2}", True, (255,255,255))
                         if player_position_2 == 100:
                                 
-                                screen.blit(congrats)
-                                player_position_1 = 0
-                                player_position_2 = 0
-                                delay_and_ignore_input(1000)
+                                win_screen=True
+                                screen.blit(options_menu,(100,200))
+                                screen.blit(congrats,(100,200))
+                                screen.blit(leave_img,(380,470))
+                                screen.blit(restart_img,(150,460))
+                                screen.blit(pygame.font.SysFont("Arial",50).render("Player 2 won ", True, (255,255,255)),(190,400))
+                                while win_screen :
+                                    for event in pygame.event.get():
+                                        if event.type==pygame.QUIT:
+                                            sys.exit()
+                                        if (event.type == pygame.MOUSEBUTTONDOWN and rst_quit.collidepoint(event.pos)):
+                                            player_position_1=0
+                                            player_position_2=0
+                                            main_menu()
+                                        if (event.type == pygame.MOUSEBUTTONDOWN and play_again.collidepoint(event.pos)):
+                                            player_position_1 = 0
+                                            player_position_2 = 0
+                                            play_game()
+                                    pygame.display.flip()
+                        delay_and_ignore_input(500)
                     if current_dice == 6:
                         current_player = 2
                     else:
@@ -293,7 +323,6 @@ def restart():
         no_rect = pygame.Rect(350, 350, 100, 50)    
         yes_text = pygame.font.SysFont("Arial", 30).render("Yes (Y)", True, (255, 255, 255))
         no_text = pygame.font.SysFont("Arial", 30).render("No (N)", True, (255, 255, 255))
-        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -318,9 +347,9 @@ def restart():
         screen.blit(yes_text, (yes_rect.x+20, yes_rect.y+5))
         screen.blit(no_text, (no_rect.x+20, no_rect.y+5))
         screen.blit(text,(120,250))
-        
         pygame.display.flip()
-while True:
-    main_menu()
-    sys.exit()
+
+main_menu()
+pygame.quit()
+sys.exit()
 
